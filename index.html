@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chase the Last Light | Parallax Scroll</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Newsreader:ital,wght@0,400;1,400&display=swap">
+<style>
+:root{--ink:#0b0a1f;--night:#1a1740;--dusk:#5b3b7a;--rose:#e8718d;--amber:#ffc27a;--mist:#f6e7da;
+--head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;--body:"Newsreader",Georgia,serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--dusk);scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--ink);color:var(--mist);font:1.25rem/1.6 var(--body);overflow-x:hidden}
+section{position:relative;overflow:hidden}
+.layer{position:absolute;left:-4%;width:108%;will-change:transform;pointer-events:none}
+.ridge{bottom:-30vh;height:80vh}
+.ridge svg{width:100%;height:100%;display:block}
+.copy{position:relative;z-index:5;max-width:34rem;padding:0 1.5rem}
+h1,h2{font-family:var(--head);font-weight:800;line-height:.95;letter-spacing:-.03em;margin:0 0 1.2rem}
+h1{font-size:clamp(3.4rem,13vw,9.5rem)}
+h2{font-size:clamp(2.4rem,7vw,5rem)}
+p{margin:0 0 1rem}
+/* hero */
+#hero{height:115vh;background:linear-gradient(#5b3b7a 0%,#c2587f 55%,#ffb482 85%)}
+#hero .copy{max-width:none;position:absolute;top:18vh;left:0;right:0;text-align:center;animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
+#hero p{font-style:italic;font-size:1.35rem;color:#fff3e6}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}}
+.sun{width:min(34vw,260px);aspect-ratio:1;border-radius:50%;left:50%;margin-left:calc(min(34vw,260px)/-2);top:44vh;background:radial-gradient(circle at 50% 50%,#fff6d8,var(--amber) 55%,#ff9a6b);box-shadow:0 0 120px 40px rgba(255,194,122,.55)}
+/* mist */
+#mist{min-height:130vh;background:linear-gradient(#2a1f4d,var(--night));padding:30vh 0}
+#mist .copy{margin-left:max(1.5rem,8vw)}
+.cloud{height:90px;border-radius:50%;background:radial-gradient(closest-side,rgba(246,231,218,.5),rgba(246,231,218,0));filter:blur(6px)}
+/* night */
+#night{min-height:150vh;background:linear-gradient(var(--night),var(--ink) 60%);padding:30vh 0 0}
+#night .copy{margin-left:auto;margin-right:max(1.5rem,8vw);text-align:right}
+.star{position:absolute;border-radius:50%;background:#fff}
+.moon{width:min(22vw,150px);aspect-ratio:1;border-radius:50%;right:18%;left:auto;top:16vh;background:radial-gradient(circle at 35% 35%,#fffdf5,#d9d2e8 70%);box-shadow:0 0 80px 20px rgba(220,210,255,.25)}
+/* summit */
+#summit{min-height:100vh;background:var(--ink);display:flex;align-items:center;justify-content:center;text-align:center}
+#summit .layer.ridge{opacity:.9}
+button{font:600 1.05rem var(--head);color:var(--ink);background:var(--amber);border:0;border-radius:999px;padding:.9rem 1.8rem;cursor:pointer;transition:transform .2s,box-shadow .2s}
+button:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(255,194,122,.35)}
+button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+small{display:block;margin-top:2rem;opacity:.6;font-size:.95rem}
+/* HUD */
+#hud{position:fixed;left:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:20;font:600 .95rem var(--head);background:rgba(11,10,31,.55);backdrop-filter:blur(8px);padding:.5rem .9rem;border-radius:999px}
+#bar{position:fixed;right:0;top:0;width:4px;height:0;background:var(--amber);z-index:20}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#hero .copy{animation:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="hud" aria-live="off">Altitude <span id="alt">0</span> m</div>
+
+<section id="hero">
+  <div class="layer sun" data-y="0.55" data-x="-8"></div>
+  <div class="layer ridge" data-y="0.5" data-x="-6" data-fill="#9a4a7e" data-amp="90" data-seed="1"></div>
+  <div class="layer ridge" data-y="0.32" data-x="-14" data-fill="#6b3a78" data-amp="110" data-seed="4" style="bottom:-34vh"></div>
+  <div class="layer ridge" data-y="0.16" data-x="-24" data-fill="#3d2a63" data-amp="130" data-seed="8" style="bottom:-38vh"></div>
+  <div class="layer ridge" data-y="0" data-x="-38" data-fill="#1a1740" data-amp="150" data-seed="12" style="bottom:-42vh"></div>
+  <div class="copy layer" data-y="-0.25" data-x="10" style="left:0;width:100%">
+    <h1>Chase the<br>last light</h1>
+    <p>Scroll to climb. Every layer moves at its own pace.</p>
+  </div>
+</section>
+
+<section id="mist">
+  <div class="layer cloud" data-y="0.1" data-sx="0.25" style="top:8vh;width:60%;left:-10%"></div>
+  <div class="layer cloud" data-y="-0.1" data-sx="-0.4" style="top:40vh;width:70%;left:40%;height:130px"></div>
+  <div class="layer cloud" data-y="0.2" data-sx="0.6" style="top:78vh;width:80%;left:-20%;height:110px"></div>
+  <div class="copy layer" data-y="-0.08" style="position:relative;left:auto;width:auto">
+    <h2>Above the treeline</h2>
+    <p>The far ridges barely move. The near ones rush past. That gap is what your eyes read as distance.</p>
+    <p>Clouds drift sideways while you climb, so the air feels like it has weather.</p>
+  </div>
+</section>
+
+<section id="night">
+  <div id="stars"></div>
+  <div class="layer moon" data-y="0.45" data-x="-10"></div>
+  <div class="copy layer" data-y="-0.1" style="position:relative;left:auto;width:auto">
+    <h2>Night on the ridge</h2>
+    <p>The moon hangs at the back of the sky and lags behind you.</p>
+    <p>Stars come in three layers. Move your pointer and they shift against each other.</p>
+  </div>
+  <div class="layer ridge" data-y="0.1" data-x="-20" data-fill="#14123a" data-amp="120" data-seed="20" style="bottom:-40vh"></div>
+  <div class="layer ridge" data-y="-0.05" data-x="-36" data-fill="#0b0a1f" data-amp="150" data-seed="25" style="bottom:-46vh"></div>
+</section>
+
+<section id="summit">
+  <div class="copy">
+    <h2>Summit</h2>
+    <p>You just scrolled through dozens of layers, each moving at its own speed.</p>
+    <button id="top" type="button">Back to the base</button>
+    <small>Made for the Techfest IIT Bombay parallax challenge.</small>
+  </div>
+</section>
+
+<script>
+(function(){
+  var $=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  // ridges
+  $('.ridge').forEach(function(el){
+    var amp=+el.dataset.amp,seed=+el.dataset.seed,h=400,d='M0 '+h;
+    for(var x=0;x<=1200;x+=15){
+      var y=h*.45-amp*(Math.sin(x*.004+seed)+.5*Math.sin(x*.011+seed*2)+.25*Math.sin(x*.026+seed*3));
+      d+=' L'+x+' '+y.toFixed(1);
+    }
+    d+=' L1200 '+h+' Z';
+    el.innerHTML='<svg viewBox="0 0 1200 '+h+'" preserveAspectRatio="none" aria-hidden="true"><path d="'+d+'" fill="'+el.dataset.fill+'"/></svg>';
+  });
+  // stars: three depth layers
+  var st=document.getElementById('stars');
+  [[0.35,-6,1.2,50],[0.2,-14,1.8,35],[0.08,-26,2.6,18]].forEach(function(c){
+    var g=document.createElement('div');g.className='layer';g.dataset.y=c[0];g.dataset.x=c[1];
+    g.style.cssText='top:0;height:100%';
+    for(var i=0;i<c[3];i++){
+      var s=document.createElement('i');s.className='star';
+      s.style.cssText='left:'+(Math.random()*100)+'%;top:'+(Math.random()*85)+'%;width:'+c[2]+'px;height:'+c[2]+'px;opacity:'+(.5+Math.random()*.5);
+      g.appendChild(s);
+    }
+    st.appendChild(g);
+  });
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var layers=$('.layer'),mx=0,ticking=false;
+  var alt=document.getElementById('alt'),bar=document.getElementById('bar');
+  function render(){
+    ticking=false;
+    var vh=innerHeight,sy=scrollY,max=document.documentElement.scrollHeight-vh;
+    layers.forEach(function(l){
+      var sec=l.closest('section'),r=sec.getBoundingClientRect();
+      if(r.bottom<-200||r.top>vh+200)return;
+      var rel=-r.top,ty=rel*(+l.dataset.y||0),tx=rel*(+l.dataset.sx||0)+mx*(+l.dataset.x||0);
+      if(reduce){ty=0;tx=0}
+      l.style.transform='translate3d('+tx+'px,'+ty+'px,0)';
+    });
+    var p=max>0?Math.min(1,sy/max):0;
+    alt.textContent=Math.round(p*4810).toLocaleString('en-US');
+    bar.style.height=(p*100)+'vh';
+  }
+  function req(){if(!ticking){ticking=true;requestAnimationFrame(render)}}
+  addEventListener('scroll',req,{passive:true});
+  addEventListener('resize',req);
+  addEventListener('pointermove',function(e){mx=(e.clientX/innerWidth-.5)*2;req()},{passive:true});
+  document.getElementById('top').addEventListener('click',function(){scrollTo({top:0})});
+  render();
+})();
+</script>
+</body>
+</html>
